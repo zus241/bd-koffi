@@ -6,14 +6,14 @@
     <title>Morning Brew - Искусство кофе</title>
     <style>
         :root {
-            --main-color: #6F4E37; /* Кофейный */
-            --secondary-color: #C4A484; /* Бежевый */
-            --accent-color: #8B4513; /* Коричневый */
-            --light-color: #F5F5DC; /* Бежевый светлый */
-            --dark-color: #3E2723; /* Темно-коричневый */
-            --font-size: 16px;
-            --font-main: 'Playfair Display', serif;
+            --main-color: #3a2c1e;
+            --secondary-color: #8b7355;
+            --accent-color: #c8a97e;
+            --light-color: #f8f4ee;
+            --dark-color: #1e1811;
+            --font-main: 'Cormorant Garamond', serif;
             --font-secondary: 'Montserrat', sans-serif;
+            --gold: #d4af37;
         }
 
         * {
@@ -24,73 +24,107 @@
 
         body {
             font-family: var(--font-secondary);
-            font-size: var(--font-size);
-            line-height: 1.6;
             color: var(--dark-color);
             background-color: var(--light-color);
+            line-height: 1.7;
+            overflow-x: hidden;
         }
 
         h1, h2, h3, h4 {
             font-family: var(--font-main);
-            font-weight: 700;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Хедер */
         header {
-            background-color: var(--dark-color);
-            color: var(--light-color);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.4s ease;
             padding: 1.5rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background: rgba(30, 24, 17, 0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-scrolled {
+            padding: 1rem 0;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1);
         }
 
         .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 0 2rem;
+            padding: 0 3rem;
         }
 
         .logo {
             font-family: var(--font-main);
-            font-size: 1.8rem;
-            color: var(--secondary-color);
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--accent-color);
             text-decoration: none;
+            position: relative;
         }
 
         .logo span {
             color: var(--light-color);
         }
 
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--gold);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover::after {
+            transform: scaleX(1);
+        }
+
         nav ul {
             display: flex;
             list-style: none;
-            gap: 2rem;
+            gap: 2.5rem;
         }
 
         nav a {
             color: var(--light-color);
             text-decoration: none;
             font-weight: 500;
-            transition: all 0.3s ease;
+            font-size: 1.1rem;
             position: relative;
-        }
-
-        nav a:hover {
-            color: var(--secondary-color);
+            padding: 0.5rem 0;
         }
 
         nav a::after {
             content: '';
             position: absolute;
+            bottom: 0;
+            left: 0;
             width: 0;
             height: 2px;
-            bottom: -5px;
-            left: 0;
-            background-color: var(--secondary-color);
+            background: var(--gold);
             transition: width 0.3s ease;
         }
 
@@ -98,204 +132,315 @@
             width: 100%;
         }
 
+        /* Герой секция */
         .hero {
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1497935586351-b67a49e012bf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
-            height: 80vh;
+            height: 100vh;
             display: flex;
             align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
             position: relative;
+            overflow: hidden;
+        }
+
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(30, 24, 17, 0.4);
+            z-index: 0;
         }
 
         .hero-content {
-            max-width: 800px;
-            padding: 0 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 3rem;
+            position: relative;
+            z-index: 1;
+            color: white;
             animation: fadeIn 1.5s ease-out;
         }
 
         .hero h1 {
-            font-size: 3.5rem;
+            font-size: 4.5rem;
             margin-bottom: 1.5rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            line-height: 1.1;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
         }
 
         .hero p {
             font-size: 1.3rem;
-            margin-bottom: 2rem;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            max-width: 600px;
+            margin-bottom: 3rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
         }
 
         .btn {
             display: inline-block;
-            background-color: var(--main-color);
+            background: transparent;
             color: white;
-            padding: 1rem 2rem;
-            border-radius: 30px;
+            padding: 1.2rem 2.5rem;
+            border-radius: 0;
             text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
+            font-weight: 500;
+            transition: all 0.4s ease;
+            border: 2px solid var(--gold);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gold);
+            transition: all 0.4s ease;
+            z-index: -1;
         }
 
         .btn:hover {
-            background-color: transparent;
-            border-color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            color: var(--dark-color);
         }
 
-        .btn-secondary {
-            background-color: transparent;
-            border: 2px solid white;
-            margin-left: 1rem;
+        .btn:hover::before {
+            left: 0;
         }
 
-        .btn-secondary:hover {
-            background-color: white;
-            color: var(--main-color);
+        /* О кофейне */
+        .about {
+            padding: 8rem 0;
+            position: relative;
+        }
+
+        .about::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            opacity: 0.05;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 3rem;
         }
 
         .section-title {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 5rem;
             position: relative;
         }
 
         .section-title h2 {
-            font-size: 2.5rem;
+            font-size: 3rem;
             color: var(--main-color);
             display: inline-block;
-            padding-bottom: 1rem;
+            padding-bottom: 1.5rem;
         }
 
         .section-title h2::after {
             content: '';
             position: absolute;
-            width: 80px;
+            width: 100px;
             height: 3px;
-            background-color: var(--accent-color);
+            background: var(--gold);
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 5rem 2rem;
-        }
-
-        .about {
-            background-color: white;
-        }
-
         .about-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 3rem;
+            gap: 5rem;
             align-items: center;
         }
 
         .about-text h3 {
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            color: var(--dark-color);
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--main-color);
+            position: relative;
+            display: inline-block;
+        }
+
+        .about-text h3::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50%;
+            height: 2px;
+            background: var(--gold);
         }
 
         .about-text p {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.8rem;
             line-height: 1.8;
+            font-size: 1.1rem;
         }
 
         .about-image {
             position: relative;
-            border-radius: 10px;
+            border-radius: 5px;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.1);
+            transform: rotate(-2deg);
+            transition: all 0.4s ease;
+        }
+
+        .about-image:hover {
+            transform: rotate(0deg);
+            box-shadow: 0 40px 60px rgba(0, 0, 0, 0.15);
         }
 
         .about-image img {
             width: 100%;
             height: auto;
             display: block;
-            transition: transform 0.5s ease;
+            transition: transform 0.8s ease;
         }
 
         .about-image:hover img {
             transform: scale(1.05);
         }
 
+        /* Меню */
         .menu {
-            background-color: var(--light-color);
+            padding: 8rem 0;
+            background: var(--light-color);
+            position: relative;
+        }
+
+        .menu::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            opacity: 0.03;
+            z-index: 0;
         }
 
         .menu-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            position: relative;
+            z-index: 1;
         }
 
         .menu-item {
-            background-color: white;
-            border-radius: 10px;
+            background: white;
+            border-radius: 5px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
+            z-index: 1;
         }
 
         .menu-item:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
         }
 
         .menu-item img {
             width: 100%;
-            height: 200px;
+            height: 250px;
             object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+
+        .menu-item:hover img {
+            transform: scale(1.1);
         }
 
         .menu-item-content {
-            padding: 1.5rem;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
         }
 
         .menu-item h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+            margin-bottom: 0.8rem;
             color: var(--main-color);
         }
 
         .menu-item-price {
             font-weight: bold;
-            color: var(--accent-color);
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
+            color: var(--gold);
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            font-family: var(--font-main);
         }
 
         .menu-item p {
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             color: #666;
+            font-size: 1rem;
         }
 
+        /* Отзывы */
         .testimonials {
-            background-color: white;
+            padding: 8rem 0;
+            background: var(--main-color);
+            color: white;
         }
 
         .testimonial-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
         }
 
         .testimonial {
-            background-color: var(--light-color);
-            padding: 2rem;
-            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 3rem;
+            border-radius: 5px;
             position: relative;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
+        }
+
+        .testimonial:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
         }
 
         .testimonial::before {
@@ -303,17 +448,20 @@
             position: absolute;
             top: 20px;
             left: 20px;
-            font-size: 4rem;
-            color: rgba(111, 78, 55, 0.1);
+            font-size: 5rem;
+            color: rgba(255, 255, 255, 0.1);
             font-family: Georgia, serif;
             line-height: 1;
+            z-index: 0;
         }
 
         .testimonial p {
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
             font-style: italic;
             position: relative;
             z-index: 1;
+            font-size: 1.1rem;
+            line-height: 1.8;
         }
 
         .testimonial-author {
@@ -322,153 +470,182 @@
         }
 
         .testimonial-author img {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             object-fit: cover;
-            margin-right: 1rem;
+            margin-right: 1.5rem;
+            border: 2px solid var(--gold);
         }
 
         .author-info h4 {
-            font-size: 1rem;
-            margin-bottom: 0.2rem;
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+            color: white;
         }
 
         .author-info p {
-            font-size: 0.8rem;
-            color: #777;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
             margin: 0;
             font-style: normal;
         }
 
+        /* Контакты */
         .contact {
-            background-color: var(--light-color);
+            padding: 8rem 0;
+            background: var(--light-color);
+            position: relative;
         }
 
         .contact-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 3rem;
+            gap: 5rem;
         }
 
         .contact-info h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
             color: var(--main-color);
+            position: relative;
+            display: inline-block;
+        }
+
+        .contact-info h3::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50%;
+            height: 2px;
+            background: var(--gold);
         }
 
         .contact-info p {
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
         }
 
         .contact-details {
-            margin-top: 2rem;
+            margin-top: 3rem;
         }
 
         .contact-detail {
             display: flex;
             align-items: center;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .contact-detail i {
-            width: 40px;
-            height: 40px;
-            background-color: var(--main-color);
-            color: white;
+            width: 50px;
+            height: 50px;
+            background: var(--gold);
+            color: var(--dark-color);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 1rem;
+            margin-right: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .contact-detail div {
+            flex: 1;
+        }
+
+        .contact-detail strong {
+            display: block;
+            margin-bottom: 0.3rem;
+            color: var(--main-color);
         }
 
         .contact-form form {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            background: white;
+            padding: 3rem;
+            border-radius: 5px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05);
         }
 
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
             font-weight: 500;
-            color: var(--dark-color);
+            color: var(--main-color);
+            font-size: 1rem;
         }
 
         .form-control {
             width: 100%;
-            padding: 0.8rem 1rem;
+            padding: 1rem 1.2rem;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 3px;
             font-family: var(--font-secondary);
             font-size: 1rem;
             transition: all 0.3s ease;
+            background: rgba(0, 0, 0, 0.02);
         }
 
         .form-control:focus {
-            border-color: var(--main-color);
+            border-color: var(--gold);
             outline: none;
-            box-shadow: 0 0 0 3px rgba(111, 78, 55, 0.2);
+            box-shadow: 0 0 0 3px rgba(200, 169, 126, 0.2);
+            background: white;
         }
 
         textarea.form-control {
-            min-height: 150px;
+            min-height: 180px;
             resize: vertical;
         }
 
-        .form-control::placeholder {
-            color: #999;
+        .submit-btn {
+            background: var(--gold);
+            color: var(--dark-color);
+            border: none;
+            padding: 1.2rem 2.5rem;
+            border-radius: 0;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.4s ease;
+            width: 100%;
             font-family: var(--font-secondary);
         }
 
-        .submit-btn {
-            background-color: var(--main-color);
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            width: 100%;
-        }
-
         .submit-btn:hover {
-            background-color: var(--dark-color);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            background: var(--main-color);
+            color: white;
         }
 
+        /* Футер */
         footer {
-            background-color: var(--dark-color);
-            color: var(--light-color);
-            padding: 3rem 0 1.5rem;
+            background: var(--dark-color);
+            color: white;
+            padding: 5rem 0 2rem;
         }
 
         .footer-content {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
+            gap: 3rem;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 0 2rem;
+            padding: 0 3rem;
         }
 
         .footer-column h3 {
             font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-            color: var(--secondary-color);
+            margin-bottom: 2rem;
+            color: var(--gold);
             position: relative;
-            padding-bottom: 0.5rem;
+            padding-bottom: 1rem;
         }
 
         .footer-column h3::after {
@@ -476,59 +653,101 @@
             position: absolute;
             width: 40px;
             height: 2px;
-            background-color: var(--accent-color);
+            background: var(--gold);
             bottom: 0;
             left: 0;
         }
 
         .footer-column p {
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.8;
         }
 
         .footer-links li {
-            margin-bottom: 0.8rem;
+            margin-bottom: 1rem;
             list-style: none;
         }
 
         .footer-links a {
-            color: var(--light-color);
+            color: rgba(255, 255, 255, 0.7);
             text-decoration: none;
             transition: color 0.3s ease;
+            font-size: 1rem;
         }
 
         .footer-links a:hover {
-            color: var(--secondary-color);
+            color: var(--gold);
         }
 
         .social-links {
             display: flex;
             gap: 1rem;
-            margin-top: 1rem;
+            margin-top: 1.5rem;
         }
 
         .social-links a {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.1);
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
-            color: var(--light-color);
+            color: white;
             transition: all 0.3s ease;
+            font-size: 1.2rem;
         }
 
         .social-links a:hover {
-            background-color: var(--secondary-color);
+            background: var(--gold);
             color: var(--dark-color);
             transform: translateY(-3px);
         }
 
         .copyright {
             text-align: center;
-            margin-top: 3rem;
-            padding-top: 1.5rem;
+            margin-top: 5rem;
+            padding-top: 2rem;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        /* Анимации и декоративные элементы */
+        .floating-coffee {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23c8a97e"><path d="M20 3H4v10a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4v-3h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 5h-2V5h2zM2 21h18v-2H2z"/></svg>') no-repeat center center;
+            opacity: 0.2;
+            animation: float 6s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        .floating-coffee-1 {
+            top: 20%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .floating-coffee-2 {
+            top: 60%;
+            right: 8%;
+            animation-delay: 1s;
+        }
+
+        .floating-coffee-3 {
+            bottom: 10%;
+            left: 15%;
+            animation-delay: 2s;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 1200px) {
+            .hero h1 {
+                font-size: 3.8rem;
+            }
         }
 
         @media (max-width: 992px) {
@@ -538,10 +757,16 @@
 
             .about-image {
                 order: -1;
+                max-width: 600px;
+                margin: 0 auto;
             }
 
             .hero h1 {
-                font-size: 2.8rem;
+                font-size: 3.2rem;
+            }
+
+            .section-title h2 {
+                font-size: 2.5rem;
             }
         }
 
@@ -549,19 +774,20 @@
             .header-content {
                 flex-direction: column;
                 text-align: center;
+                padding: 0 1.5rem;
             }
 
             .logo {
-                margin-bottom: 1rem;
+                margin-bottom: 1.5rem;
             }
 
             nav ul {
                 flex-direction: column;
-                gap: 0.5rem;
+                gap: 1rem;
             }
 
             .hero h1 {
-                font-size: 2.2rem;
+                font-size: 2.5rem;
             }
 
             .hero p {
@@ -577,53 +803,44 @@
             .btn-secondary {
                 margin-left: 0;
             }
+
+            .container {
+                padding: 0 1.5rem;
+            }
+
+            .menu-grid, .testimonial-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
         }
 
         @media (max-width: 480px) {
-            :root {
-                --font-size: 14px;
-            }
-
             .hero h1 {
-                font-size: 1.8rem;
+                font-size: 2rem;
             }
 
             .section-title h2 {
                 font-size: 2rem;
             }
-        }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
+            .about-text h3, .contact-info h3 {
+                font-size: 1.5rem;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+
+            .menu-item-content, .testimonial, .contact-form form {
+                padding: 1.5rem;
             }
-        }
-
-        .animated {
-            animation: fadeIn 1s ease-out forwards;
-        }
-
-        /* Кофейные элементы */
-        .coffee-icon {
-            display: inline-block;
-            width: 24px;
-            height: 24px;
-            background-color: var(--main-color);
-            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20 3H4v10a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4v-3h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 5h-2V5h2zM2 21h18v-2H2z'/%3E%3C/svg%3E") no-repeat center;
-            vertical-align: middle;
-            margin-right: 8px;
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
-    <header>
+    <header id="header">
         <div class="header-content">
             <a href="#" class="logo">Morning<span>Brew</span></a>
             <nav>
@@ -639,11 +856,15 @@
     </header>
 
     <section class="hero" id="home">
-        <div class="hero-content animated">
-            <h1>Искусство в каждой чашке</h1>
-            <p>Откройте для себя неповторимый вкус нашего кофе из отборных зерен</p>
+        <video autoplay muted loop class="hero-video">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-steaming-coffee-cup-in-a-coffee-shop-4144-large.mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Искусство кофе в каждом зерне</h1>
+            <p>Откройте для себя премиальные сорта кофе из лучших регионов мира, приготовленные с мастерством и страстью</p>
             <div class="btn-group">
-                <a href="#menu" class="btn">Наше меню</a>
+                <a href="#menu" class="btn">Исследовать меню</a>
                 <a href="#contact" class="btn btn-secondary">Забронировать столик</a>
             </div>
         </div>
@@ -656,16 +877,18 @@
             </div>
             <div class="about-content">
                 <div class="about-text">
-                    <h3>Кофейня с душой</h3>
-                    <p>Основанная в 2025 году, Morning Brew создавалась как место, где каждый может найти свой идеальный кофе. Мы верим, что хороший кофе - это не просто напиток, а искусство, которое может изменить ваш день.</p>
-                    <p>Мы сотрудничаем напрямую с фермерами из Эфиопии, Колумбии и Бразилии, чтобы привезти вам лучшие зерна. Наша обжарка - это баланс между традициями и инновациями.</p>
-                    <p>Наши бариста проходят строгий отбор и обучение, чтобы приготовить для вас кофе именно так, как вы любите.</p>
+                    <h3>Кофейная алхимия</h3>
+                    <p>Основанная в 2010 году, Morning Brew переосмысливает традиции кофейной культуры. Мы не просто готовим кофе - мы создаем произведения искусства в каждой чашке.</p>
+                    <p>Наши зерна проходят строгий отбор у лучших фермеров Эфиопии, Колумбии и Коста-Рики. Эксклюзивная технология обжарки раскрывает глубину вкуса и неповторимый аромат.</p>
+                    <p>Каждый наш бариста - настоящий мастер, прошедший обучение у чемпионов мировых чемпионатов бариста. Они знают, как превратить процесс приготовления кофе в магическое действо.</p>
                 </div>
                 <div class="about-image">
-                    <img src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Интерьер кофейни">
+                    <img src="https://images.unsplash.com/photo-1463797221720-6b07e6426c24?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Интерьер кофейни Morning Brew">
                 </div>
             </div>
         </div>
+        <div class="floating-coffee floating-coffee-1"></div>
+        <div class="floating-coffee floating-coffee-2"></div>
     </section>
 
     <section class="menu" id="menu">
@@ -675,90 +898,91 @@
             </div>
             <div class="menu-grid">
                 <div class="menu-item">
-                    <img src="https://images.unsplash.com/photo-1512568400610-62da28bc8a13?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Фильтр кофе">
+                    <img src="https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Гейша">
                     <div class="menu-item-content">
-                        <h3>Фильтр кофе</h3>
-                        <div class="menu-item-price">220 ₽</div>
-                        <p>Арабика из Эфиопии, приготовленная методом пуровер. Легкий вкус с нотками цитрусов и ягод.</p>
+                        <h3>Гейша Эфиопия</h3>
+                        <div class="menu-item-price">450 ₽</div>
+                        <p>Элитный сорт с цветочными нотами жасмина и персика. Приготовлен методом V60 для максимального раскрытия вкуса.</p>
                     </div>
                 </div>
                 <div class="menu-item">
-                    <img src="https://i.postimg.cc/7h86tV3M/image.png" alt="Колд брю">
+                    <img src="https://images.unsplash.com/photo-1534778101976-62847782c213?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Колд брю">
                     <div class="menu-item-content">
-                        <h3>Колд брю</h3>
-                        <div class="menu-item-price">280 ₽</div>
-                        <p>Кофе холодного заваривания с насыщенным вкусом и низкой кислотностью. Подается со льдом.</p>
+                        <h3>Колд брю премиум</h3>
+                        <div class="menu-item-price">380 ₽</div>
+                        <p>20-часовое холодное заваривание зерен из Колумбии. Насыщенный вкус с нотами черного шоколада и вишни.</p>
                     </div>
                 </div>
                 <div class="menu-item">
-                    <img src="https://i.postimg.cc/4NvKMrFK/image.png" alt="Латте с лавандой">
+                    <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Голден латте">
                     <div class="menu-item-content">
-                        <h3>Латте с лавандой</h3>
-                        <div class="menu-item-price">320 ₽</div>
-                        <p>Нежный латте с добавлением натурального лавандового сиропа и цветочными нотками.</p>
-                    </div>
-                </div>
-                <div class="menu-item">
-                    <img src="https://i.postimg.cc/XqdZnhjz/image.png" alt="Аффогато">
-                    <div class="menu-item-content">
-                        <h3>Аффогато</h3>
+                        <h3>Голден латте</h3>
                         <div class="menu-item-price">350 ₽</div>
-                        <p>Двойной эспрессо с шариком ванильного мороженого. Идеальный баланс горького и сладкого.</p>
+                        <p>Фирменный напиток с куркумой, имбирем и медом. Идеальный баланс пряностей и нежности молока.</p>
                     </div>
                 </div>
                 <div class="menu-item">
-                    <img src="https://i.postimg.cc/fbqSCmqB/image.png" alt="Матча латте">
+                    <img src="https://images.unsplash.com/photo-1522992319-0365e5f11656?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Нитро кофе">
                     <div class="menu-item-content">
-                        <h3>Матча латте</h3>
-                        <div class="menu-item-price">300 ₽</div>
-                        <p>Традиционный японский чай матча с молоком. Бодрящий и полезный напиток.</p>
+                        <h3>Нитро кофе</h3>
+                        <div class="menu-item-price">420 ₽</div>
+                        <p>Кофе холодного заваривания, насыщенный азотом. Кремовая текстура с нотами карамели и ореха.</p>
                     </div>
                 </div>
                 <div class="menu-item">
-                    <img src="https://i.postimg.cc/mrfQMQqM/image.png" alt="Круассаны">
+                    <img src="https://images.unsplash.com/photo-1568649929103-28ffbefaca1e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Сиропный раф">
                     <div class="menu-item-content">
-                        <h3>Домашние круассаны</h3>
-                        <div class="menu-item-price">от 180 ₽</div>
-                        <p>Свежая выпечка: классические, миндальные, шоколадные и сезонные варианты.</p>
+                        <h3>Сиропный раф</h3>
+                        <div class="menu-item-price">320 ₽</div>
+                        <p>Взбитая смесь эспрессо, сливок и фирменного сиропа. Доступны ванильный, карамельный и кленовый варианты.</p>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <img src="https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Десерты">
+                    <div class="menu-item-content">
+                        <h3>Авторские десерты</h3>
+                        <div class="menu-item-price">от 280 ₽</div>
+                        <p>Эксклюзивные сладости от нашего кондитера: кофейный тирамису, матча-чизкейк, соленая карамель.</p>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="floating-coffee floating-coffee-3"></div>
     </section>
 
     <section class="testimonials" id="testimonials">
         <div class="container">
             <div class="section-title">
-                <h2>Отзывы наших гостей</h2>
+                <h2>Мнения знатоков</h2>
             </div>
             <div class="testimonial-grid">
                 <div class="testimonial">
-                    <p>Фильтр кофе здесь просто потрясающий! Никогда не думала, что кофе может иметь такой сложный вкусовой профиль. Теперь это мое обязательное место для утреннего ритуала.</p>
+                    <p>"Гейша из Morning Brew - это произведение искусства. Цветочные ноты настолько чисты и выразительны, что кажется, будто пьешь не кофе, а жидкий бриллиант. Атмосфера кофейни переносит в другой мир."</p>
                     <div class="testimonial-author">
-                        <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Екатерина">
+                        <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Анна">
                         <div class="author-info">
-                            <h4>Екатерина Л.</h4>
-                            <p>Дизайнер, постоянный гость</p>
+                            <h4>Анна Ковалева</h4>
+                            <p>Кофейный критик, Bean Magazine</p>
                         </div>
                     </div>
                 </div>
                 <div class="testimonial">
-                    <p>Как бариста с 10-летним стажем, я высоко оцениваю качество зерен и мастерство бариста. Особенно впечатлил колд брю - идеальный баланс вкусов. Рекомендую всем ценителям!</p>
+                    <p>"Как профессиональный бариста, я оцениваю не только вкус, но и технику приготовления. В Morning Brew работают настоящие мастера - их пуровер идеален, а латте-арт достоин музейной экспозиции. Колд брю - лучший в городе!"</p>
                     <div class="testimonial-author">
-                        <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Александр">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Дмитрий">
                         <div class="author-info">
-                            <h4>Александр П.</h4>
-                            <p>Профессиональный бариста</p>
+                            <h4>Дмитрий Соколов</h4>
+                            <p>Чемпион России среди бариста, 2022</p>
                         </div>
                     </div>
                 </div>
                 <div class="testimonial">
-                    <p>Латте с лавандой - это нечто! Такой нежный и ароматный напиток. Атмосфера в кофейне очень вдохновляет, часто прихожу сюда работать. Персонал всегда приветливый и внимательный.</p>
+                    <p>"Прихожу сюда работать каждый вторник и четверг. Идеальный баланс уюта и вдохновения. Wi-Fi стабильный, розетки на каждом столе, а главное - нитро кофе бодрит лучше любого энергетика. Персонал знает меня и мой заказ!"</p>
                     <div class="testimonial-author">
-                        <img src="https://randomuser.me/api/portraits/women/56.jpg" alt="Анна">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Елена">
                         <div class="author-info">
-                            <h4>Анна М.</h4>
-                            <p>Блогер, фуд-критик</p>
+                            <h4>Елена Ветрова</h4>
+                            <p>Креативный директор, фрилансер</p>
                         </div>
                     </div>
                 </div>
@@ -769,12 +993,12 @@
     <section class="contact" id="contact">
         <div class="container">
             <div class="section-title">
-                <h2>Контакты</h2>
+                <h2>Посетите нас</h2>
             </div>
             <div class="contact-container">
                 <div class="contact-info">
-                    <h3>Приходите в гости</h3>
-                    <p>Мы открыты ежедневно с 8:00 до 22:00. Ждем вас за чашечкой ароматного кофе!</p>
+                    <h3>Мы ждем вас</h3>
+                    <p>Наша кофейня - это место, где рождаются идеи, заключаются сделки и просто наслаждаются моментом. Приходите за вдохновением и идеальным кофе.</p>
                     <div class="contact-details">
                         <div class="contact-detail">
                             <i class="fas fa-map-marker-alt"></i>
@@ -794,68 +1018,14 @@
                             <i class="fas fa-envelope"></i>
                             <div>
                                 <strong>Email</strong>
-                                <p>hello@morningbrew.ru</p>
+                                <p>reserve@morningbrew.ru</p>
+                            </div>
+                        </div>
+                        <div class="contact-detail">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <strong>Часы работы</strong>
+                                <p>Пн-Пт: 7:30 - 22:00<br>Сб-Вс: 9:00 - 23:00</p>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="contact-form">
-                    <form>
-                        <div class="form-group">
-                            <label for="name">Ваше имя</label>
-                            <input type="text" id="name" class="form-control" placeholder="Как вас зовут?" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" class="form-control" placeholder="Ваш email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Телефон</label>
-                            <input type="tel" id="phone" class="form-control" placeholder="Ваш телефон">
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Сообщение</label>
-                            <textarea id="message" class="form-control" placeholder="Ваше сообщение или бронь столика" required></textarea>
-                        </div>
-                        <button type="submit" class="submit-btn">Отправить</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-column">
-                <h3>О нас</h3>
-                <p>Morning Brew - это место, где рождается любовь к кофе. Мы стремимся создавать уникальные вкусы и дарить нашим гостям незабываемые впечатления.</p>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-vk"></i></a>
-                    <a href="#"><i class="fab fa-telegram-plane"></i></a>
-                </div>
-            </div>
-            <div class="footer-column">
-                <h3>Часы работы</h3>
-                <p><strong>Пн-Пт:</strong> 8:00 - 22:00</p>
-                <p><strong>Сб-Вс:</strong> 9:00 - 23:00</p>
-                <p>Последний заказ принимается за 30 минут до закрытия.</p>
-            </div>
-            <div class="footer-column">
-                <h3>Быстрые ссылки</h3>
-                <ul class="footer-links">
-                    <li><a href="#home">Главная</a></li>
-                    <li><a href="#about">О нас</a></li>
-                    <li><a href="#menu">Меню</a></li>
-                    <li><a href="#testimonials">Отзывы</a></li>
-                    <li><a href="#contact">Контакты</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="copyright">
-            <p>&copy; 2025 Morning Brew. Все права защищены.</p>
-        </div>
-    </footer>
-</body>
-</html>
